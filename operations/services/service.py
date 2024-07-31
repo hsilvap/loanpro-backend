@@ -1,6 +1,7 @@
 import os
-from sqlmodel import Field, Session, SQLModel, create_engine, select
+from sqlmodel import  Session,  create_engine, select
 from typing import List, Optional
+from models.operation import Operation
 
 DB_USER = os.environ['DB_USER']
 DB_PASSWORD = os.environ['DB_PASSWORD']
@@ -8,19 +9,6 @@ DB_HOST = os.environ['DB_HOST']
 DB_NAME = os.environ['DB_NAME']
 
 DATABASE_URL = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
-
-class Operation(SQLModel, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
-    type: str
-    cost: int
-    is_deleted: bool = Field(default=False)
-
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'type': self.type,
-            'cost': self.cost
-        }
 
 engine = create_engine(DATABASE_URL)
 

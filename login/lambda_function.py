@@ -1,7 +1,7 @@
 import os
 import logging
-from sqlmodel import  Field, Session, SQLModel, create_engine, select
-from typing import  Optional
+from sqlmodel import Session, create_engine, select
+from models.user import User
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.ERROR)
@@ -12,18 +12,6 @@ DB_HOST = os.environ['DB_HOST']
 DB_NAME = os.environ['DB_NAME']
 
 DATABASE_URL = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
-
-class User(SQLModel, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
-    username: str = Field(unique=True)  # email
-    active: bool = Field(default=True)
-
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'username': self.username,
-            'active': self.active
-        }
         
 engine = create_engine(DATABASE_URL)
         

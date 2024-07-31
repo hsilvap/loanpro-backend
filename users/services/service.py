@@ -1,6 +1,7 @@
 import os
-from sqlmodel import Field, Session, SQLModel, create_engine, select
+from sqlmodel import  Session,  create_engine, select
 from typing import List, Optional
+from models.user import User
 
 DB_USER = os.environ['DB_USER']
 DB_PASSWORD = os.environ['DB_PASSWORD']
@@ -9,17 +10,6 @@ DB_NAME = os.environ['DB_NAME']
 
 DATABASE_URL = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
 
-class User(SQLModel, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
-    username: str = Field(unique=True)  # email
-    active: bool = Field(default=True)
-
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'username': self.username,
-            'active': self.active
-        }
 
 engine = create_engine(DATABASE_URL)
 

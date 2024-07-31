@@ -11,7 +11,7 @@ os.environ['DB_NAME'] = 'test_db'
 
 
 from lambda_function import lambda_handler
-from services.service import Operation
+from models.operation import Operation
 
 class TestLambdaHandler(unittest.TestCase):
 
