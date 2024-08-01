@@ -6,6 +6,7 @@ Services are serverless functions that have been deployed to AWS Lambda. The dep
 
 ## API
 The api is managed by AWS API Gateway, its hosted [here](https://6c64q7kx12.execute-api.us-east-2.amazonaws.com/challenge). Authentication has been enabled to this APIs. The API's will return a 404 if the Authorization token isn't present or is malformed.
+The full API details are (here)[https://drive.google.com/file/d/1G8PQDBs6LkWEzRupNBVDZ2RwrJM5JaI6/view?usp=sharing]. It needs to be used with postman 
 <img width="1365" alt="image" src="https://github.com/user-attachments/assets/e7aff19a-d035-45be-9a3f-77833e782489">
 
 ## Authentication 
