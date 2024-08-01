@@ -1,11 +1,11 @@
-## Welcome to the challenge backend.
+# Welcome to the challenge backend.
  
 ## Services
 Services are serverless functions that have been deployed to AWS Lambda. The deployment was made by creating a .zip file and manually upload it to each function.
 <img width="1357" alt="image" src="https://github.com/user-attachments/assets/7d1f916f-db85-4448-a6ee-a87f553bf25e">
 
 ## API
-The api is managed by AWS API Gateway, its hosted here[https://6c64q7kx12.execute-api.us-east-2.amazonaws.com/challenge]. Authentication has been enabled to this APIs. The API's will return a 404 if the Authorization token isn't present or is malformed.
+The api is managed by AWS API Gateway, its hosted [here](https://6c64q7kx12.execute-api.us-east-2.amazonaws.com/challenge). Authentication has been enabled to this APIs. The API's will return a 404 if the Authorization token isn't present or is malformed.
 <img width="1365" alt="image" src="https://github.com/user-attachments/assets/e7aff19a-d035-45be-9a3f-77833e782489">
 
 ## Authentication 
