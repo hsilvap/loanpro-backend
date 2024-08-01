@@ -3,7 +3,6 @@ import json
 import os
 from unittest.mock import patch
 
-# Set environment variables before importing the module
 os.environ['DB_USER'] = 'test_user'
 os.environ['DB_PASSWORD'] = 'test_password'
 os.environ['DB_HOST'] = 'test_host'
@@ -14,8 +13,6 @@ from lambda_function import lambda_handler
 from models.operation import Operation
 
 class TestLambdaHandler(unittest.TestCase):
-
-  
     @patch('lambda_function.get_all_operations')
     def test_get_all_operations(self, mock_get_all):
         mock_operations = [
