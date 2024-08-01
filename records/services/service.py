@@ -2,8 +2,8 @@ import json
 import boto3
 import os
 from typing import  Optional
-from sqlmodel import  Session,  create_engine, select, func
-from sqlalchemy import Integer, Numeric, DateTime, Date, Boolean
+from sqlmodel import Session, create_engine, select, func, or_
+from sqlalchemy import Integer, Numeric, DateTime, Date, Boolean, cast, String
 from services.operations import calculate
 from models.record import Record
 
@@ -19,11 +19,30 @@ INITIAL_CREDITS = 100
 
 engine = create_engine(DATABASE_URL)
 
-def get_records(page: int = 1, per_page: int = 10, sort_by: str = 'id', sort_order: str = 'asc') -> dict:
+def get_records(page = None, per_page = None, sort_by= None, sort_order = None, user_id = None, search = None) -> dict:
     with Session(engine) as session:
+        if all(param is None for param in [page, per_page, sort_by, sort_order, user_id, search]):
+            all_records = session.exec(select(Record).where(Record.is_deleted == False)).all()
+            return all_records
+
         query = select(Record).where(Record.is_deleted == False)
         
-        if hasattr(Record, sort_by):
+        if user_id is not None:
+            query = query.where(Record.user_id == user_id)
+        
+        if search:
+            search_term = f"%{search}%"
+            query = query.where(or_(
+                cast(Record.operation_response, String).ilike(search_term),
+                cast(Record.id, String).ilike(search_term),
+                cast(Record.user_id, String).ilike(search_term),
+                cast(Record.operation_id, String).ilike(search_term),
+                cast(Record.amount, String).ilike(search_term),
+                cast(Record.user_balance, String).ilike(search_term),
+                Record.date.cast(String).ilike(search_term)
+            ))
+        
+        if sort_by and hasattr(Record, sort_by):
             order_column = getattr(Record, sort_by)
             
             if isinstance(order_column.type, (Integer, Numeric)):
@@ -33,22 +52,31 @@ def get_records(page: int = 1, per_page: int = 10, sort_by: str = 'id', sort_ord
             elif isinstance(order_column.type, Boolean):
                 order_column = func.cast(order_column, Boolean)
 
-            if sort_order.lower() == 'desc':
+            if sort_order and sort_order.lower() == 'desc':
                 query = query.order_by(order_column.desc())
             else:
                 query = query.order_by(order_column.asc())
+        else:
+            query = query.order_by(Record.id.asc())
        
         total = session.exec(select(func.count()).select_from(query.subquery())).one()
-        query = query.offset((page - 1) * per_page).limit(per_page)
+        
+        if page is not None and per_page is not None:
+            query = query.offset((page - 1) * per_page).limit(per_page)
+            pages = (total + per_page - 1) // per_page
+        else:
+            page = 1
+            per_page = total
+            pages = 1
         
         records = session.exec(query).all()
         
         return {
-            'records': [record.to_dict() for record in records],
+            'data': [record.to_dict() for record in records],
             'page': page,
             'per_page': per_page,
             'total': total,
-            'pages': (total + per_page - 1) // per_page
+            'pages': pages
         }
 
 def get_record(record_id: int) -> Optional[Record]:

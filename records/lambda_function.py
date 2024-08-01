@@ -38,12 +38,28 @@ def lambda_handler(event, context):
                     }
             else:
                 query_params = event.get('queryStringParameters', {}) or {}
-                page = int(query_params.get('page', 1))
-                per_page = int(query_params.get('per_page', 10))
-                sort_by = query_params.get('sort_by', 'id')
-                sort_order = query_params.get('sort_order', 'asc')
                 
-                records = get_records(page, per_page, sort_by, sort_order)
+                if not query_params:
+                    records = get_records()
+                    return {
+                        'statusCode': 200,
+                        'body':  json.dumps([rec.to_dict() for rec in records]),
+                        'headers': {
+                            'Access-Control-Allow-Headers': 'Content-Type',
+                            'Access-Control-Allow-Origin': '*',
+                            'Access-Control-Allow-Methods': 'OPTIONS,POST,GET,PUT,DELETE'
+                        },
+                    }
+                else:
+                    page = int(query_params.get('page', 1))
+                    per_page = int(query_params.get('per_page', 10))
+                    sort_by = query_params.get('sort_by', 'id')
+                    sort_order = query_params.get('sort_order', 'asc')
+                    user_id = int(query_params.get('user_id')) if query_params.get('user_id') else None
+                    search = query_params.get('search')
+                    
+                    records = get_records(page, per_page, sort_by, sort_order, user_id, search)
+                
                 return {
                     'statusCode': 200,
                     'body': json.dumps(records),
@@ -51,7 +67,7 @@ def lambda_handler(event, context):
                         'Access-Control-Allow-Headers': 'Content-Type',
                         'Access-Control-Allow-Origin': '*',
                         'Access-Control-Allow-Methods': 'OPTIONS,POST,GET,PUT,DELETE'
-                        },
+                    },
                 }
         
         elif event['httpMethod']  == 'POST':
