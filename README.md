@@ -19,3 +19,7 @@ Database is hosted in RDS, the engine is postgress.
 ## Running it locally
 To run each service // entity, the following .env variables are needed. Python 3.12 is recommended, and use of venv per service directory.
 `DB_USER`, `DB_PASSWORD`, `DB_HOST` and `DB_NAME`. Those will be shared if needed // asked.
+Venv is recommended per directory, do
+1. `pip install venv`
+2. `python3 -m venv venv` 
+3. `source venv/bin/activate`
