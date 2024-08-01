@@ -2,7 +2,7 @@
  
 ## Services
 Services are serverless functions that have been deployed to AWS Lambda. The deployment was made by creating a .zip file and manually upload it to each function.
-<img width="1357" alt="image" src="https://github.com/user-attachments/assets/7d1f916f-db85-4448-a6ee-a87f553bf25e">
+<img width="1357" alt="image" src="https://github.com/user-attachments/assets/8051f178-0162-47b0-8705-a5aa10a03308">
 
 ## API
 The api is managed by AWS API Gateway, its hosted [here](https://6c64q7kx12.execute-api.us-east-2.amazonaws.com/challenge). Authentication has been enabled to this APIs. The API's will return a 404 if the Authorization token isn't present or is malformed.
@@ -17,5 +17,5 @@ Database is hosted in RDS, the engine is postgress.
 <img width="1360" alt="image" src="https://github.com/user-attachments/assets/2fa6522d-d926-49ac-a300-80cdadc961a2">
 
 ## Running it locally
-To run each service // entity, the following .env variables are needed.
+To run each service // entity, the following .env variables are needed. Python 3.12 is recommended, and use of venv per service directory.
 `DB_USER`, `DB_PASSWORD`, `DB_HOST` and `DB_NAME`. Those will be shared if needed // asked.
